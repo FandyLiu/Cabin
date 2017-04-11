@@ -27,7 +27,7 @@ class SpellingCheckerTests: XCTestCase {
         XCTAssert(strA.isSpelledCorrect)
     }
     func testStrB() {
-        XCTAssert(strB.isSpelledCorrect)
+        XCTAssert(!strB.isSpelledCorrect)
     }
     
     func testStrC() {

@@ -6,7 +6,7 @@
 //  Copyright © 2017年 fandy. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension String {
     var isSpelledCorrect: Bool {
