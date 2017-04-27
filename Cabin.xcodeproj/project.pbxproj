@@ -18,6 +18,9 @@
 		DB637F111E9C735100F8F26A /* AuthorizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */; };
 		DB637F121E9C735100F8F26A /* SpellingChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F101E9C735100F8F26A /* SpellingChecker.swift */; };
 		DB637F141E9C736D00F8F26A /* SpellingCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F131E9C736D00F8F26A /* SpellingCheckerTests.swift */; };
+		DB760A1D1EA44E6F00E8C3FA /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A1C1EA44E6F00E8C3FA /* Const.swift */; };
+		DB760A201EA44F1800E8C3FA /* UIColorAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A1F1EA44F1800E8C3FA /* UIColorAdd.swift */; };
+		DB760A221EA4501600E8C3FA /* IntAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A211EA4501600E8C3FA /* IntAdd.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationManager.swift; sourceTree = "<group>"; };
 		DB637F101E9C735100F8F26A /* SpellingChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingChecker.swift; sourceTree = "<group>"; };
 		DB637F131E9C736D00F8F26A /* SpellingCheckerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingCheckerTests.swift; sourceTree = "<group>"; };
+		DB760A1C1EA44E6F00E8C3FA /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
+		DB760A1F1EA44F1800E8C3FA /* UIColorAdd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorAdd.swift; sourceTree = "<group>"; };
+		DB760A211EA4501600E8C3FA /* IntAdd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntAdd.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,7 @@
 				DB637EE91E9C730000F8F26A /* LaunchScreen.storyboard */,
 				DB637EEC1E9C730000F8F26A /* Info.plist */,
 				DB637EE41E9C730000F8F26A /* Cabin.xcdatamodeld */,
+				DB760A1E1EA44EFD00E8C3FA /* Extension */,
 				DB637F0E1E9C735100F8F26A /* Utils */,
 			);
 			path = Cabin;
@@ -141,8 +148,18 @@
 			children = (
 				DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */,
 				DB637F101E9C735100F8F26A /* SpellingChecker.swift */,
+				DB760A1C1EA44E6F00E8C3FA /* Const.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		DB760A1E1EA44EFD00E8C3FA /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				DB760A1F1EA44F1800E8C3FA /* UIColorAdd.swift */,
+				DB760A211EA4501600E8C3FA /* IntAdd.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,6 +230,7 @@
 				TargetAttributes = {
 					DB637ED91E9C730000F8F26A = {
 						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = L269878QHY;
 						ProvisioningStyle = Automatic;
 					};
 					DB637EF01E9C730000F8F26A = {
@@ -282,8 +300,11 @@
 				DB637EE01E9C730000F8F26A /* ViewController.swift in Sources */,
 				DB637F121E9C735100F8F26A /* SpellingChecker.swift in Sources */,
 				DB637F111E9C735100F8F26A /* AuthorizationManager.swift in Sources */,
+				DB760A221EA4501600E8C3FA /* IntAdd.swift in Sources */,
+				DB760A201EA44F1800E8C3FA /* UIColorAdd.swift in Sources */,
 				DB637EDE1E9C730000F8F26A /* AppDelegate.swift in Sources */,
 				DB637EE61E9C730000F8F26A /* Cabin.xcdatamodeld in Sources */,
+				DB760A1D1EA44E6F00E8C3FA /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -424,7 +445,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -436,6 +457,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L269878QHY;
 				INFOPLIST_FILE = Cabin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fandy.Cabin;
@@ -448,6 +470,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = L269878QHY;
 				INFOPLIST_FILE = Cabin/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fandy.Cabin;
@@ -529,6 +552,7 @@
 				DB637F071E9C730000F8F26A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DB637F081E9C730000F8F26A /* Build configuration list for PBXNativeTarget "CabinTests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +561,7 @@
 				DB637F0A1E9C730000F8F26A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DB637F0B1E9C730000F8F26A /* Build configuration list for PBXNativeTarget "CabinUITests" */ = {
 			isa = XCConfigurationList;
@@ -545,6 +570,7 @@
 				DB637F0D1E9C730000F8F26A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
