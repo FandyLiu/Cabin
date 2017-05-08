@@ -10,11 +10,11 @@ import UIKit
 import AVFoundation
 import Contacts
 import AddressBook
+
 import AssetsLibrary
 import Photos
 
 /*
- 
  @available(iOS 4.0, *)
  public let AVMediaTypeVideo: String
  @available(iOS 4.0, *)
@@ -66,7 +66,6 @@ enum FDMediaType {
             }
         }
     }
-    
 }
 
 
@@ -75,19 +74,19 @@ enum FDMediaType {
 class AuthorizationManagerConfiguration {
     var title: String = ""
     var message: String = ""
-    var presentingViewController: UIViewController?
+    weak var presentingViewController: UIViewController?
 }
 
 
 class AuthorizationManager {
-    private(set) static var configuration = AuthorizationManagerConfiguration()
+    static var configuration = AuthorizationManagerConfiguration()
     
-    class func configure(configure: (AuthorizationManagerConfiguration)->()) -> AuthorizationManager.Type {
-        configure(configuration)
+    class func config(config: (AuthorizationManagerConfiguration)->()) -> AuthorizationManager.Type {
+        config(configuration)
         return self
     }
     
-    /// 获取视频权限, 授权成功回调
+    /// 获取相机权限, 授权成功回调
     ///
     /// - Parameter finish: 成功回调
     class func authorizedVideo(completion: @escaping AuthorizationCompletion) {
@@ -101,43 +100,11 @@ class AuthorizationManager {
         defaultAuthorized(mediaType: .audio, completion: completion)
     }
     
-    /// 获取视频和音频权限, 授权成功回调
-    ///
-    /// - Parameter finish: 成功回调
-    class func authorizedVideoAndAudio(completion: @escaping AuthorizationCompletion) {
-        authorizedVideo { (reuslt: AuthorizationResult<AuthorizationError>) in
-            switch reuslt {
-            case .success:
-                authorizedAudio(completion: { (reuslt: AuthorizationResult<AuthorizationError>) in
-                    switch reuslt {
-                    case .success:
-                        completion(AuthorizationResult.success)
-                    case let .failure(error):
-                        completion(AuthorizationResult.failure(error))
-                    }
-                })
-            case let .failure(videoError):
-                authorizedAudio(completion: { (reuslt: AuthorizationResult<AuthorizationError>) in
-                    switch reuslt {
-                    case .success:
-                        let message = videoError.description + reuslt.description
-                        let error = AuthorizationError.message(message)
-                        completion(AuthorizationResult.failure(error))
-                    case let .failure(audioError):
-                        let message = videoError.description + audioError.description
-                        let error = AuthorizationError.message(message)
-                        completion(AuthorizationResult.failure(error))
-                    }
-                })
-            }
-        }
-    }
-    
     /// 获取通讯录权限, 授权成功回调
     ///
     /// - Parameter finish: 成功回调
-    class func authorizedContacts(finish: @escaping () -> ()) {
-        authorizedAddressBook(finish: finish)
+    class func authorizedContacts(completion: @escaping AuthorizationCompletion) {
+        authorizedAddressBook(completion: completion)
     }
 }
 
@@ -147,17 +114,17 @@ extension AuthorizationManager {
     fileprivate class func authorizedABV(finish: @escaping () -> ()) {
         
         let status = PHPhotoLibrary.authorizationStatus()
-//        switch status {
-//        case .notDetermined:
-//            PHPhotoLibrary.requestAuthorization({ (status) in
-//                if status == PHAuthorizationStatus.authorized {
-//                    DispatchQueue.main.async {
-//                        finish()
-//                    }
-//                }
-//            })
-//            
-//        }
+        //        switch status {
+        //        case .notDetermined:
+        //            PHPhotoLibrary.requestAuthorization({ (status) in
+        //                if status == PHAuthorizationStatus.authorized {
+        //                    DispatchQueue.main.async {
+        //                        finish()
+        //                    }
+        //                }
+        //            })
+        //
+        //        }
         
         
     }
@@ -165,7 +132,7 @@ extension AuthorizationManager {
 
 // MARK: - 通讯录授权私有方法
 extension AuthorizationManager {
-    fileprivate class func authorizedAddressBook(finish: @escaping () -> ()) {
+    fileprivate class func authorizedAddressBook(completion: @escaping AuthorizationCompletion) {
         if #available(iOS 9.0, *) {
             let entityType = CNEntityType.contacts
             let status = CNContactStore.authorizationStatus(for: entityType)
@@ -173,22 +140,25 @@ extension AuthorizationManager {
             case .notDetermined:
                 let store = CNContactStore()
                 store.requestAccess(for: entityType, completionHandler: { (granted, error) in
-                    if granted {
-                        // 这个回调是子线程
-                        DispatchQueue.main.async {
-                            finish()
+                    // 这个回调是子线程
+                    DispatchQueue.main.async {
+                        if granted {
+                            completion(AuthorizationResult.success("notDetermined"))
+                        } else {
+                            let message = error.debugDescription
+                            let error = AuthorizationError.contacts(message)
+                            completion(AuthorizationResult.failure(error))
                         }
-                    } else {
-                        print("授权失败")
-                        print(error ?? "授权失败的错误为空")
                     }
                 })
             case .authorized:
                 DispatchQueue.main.async {
-                    finish()
+                    completion(AuthorizationResult.success("authorized"))
                 }
             case .restricted, .denied:
-                setDefaultAlertController()
+                DispatchQueue.main.async {
+                    setDefaultAlertController()
+                }
             }
         } else {
             let status = ABAddressBookGetAuthorizationStatus()
@@ -196,59 +166,88 @@ extension AuthorizationManager {
             case .notDetermined:
                 let addressBook = ABAddressBookCreate().takeUnretainedValue()
                 ABAddressBookRequestAccessWithCompletion(addressBook, { (granted, error) in
-                    if granted {
-                        DispatchQueue.main.async {
-                            finish()
-                        }
-                    } else {
-                        print("授权失败")
-                        print(error ?? "授权失败的错误为空")
-                    }
-                })
-            case .authorized:
-                DispatchQueue.main.async {
-                    finish()
-                }
-            case .restricted, .denied:
-                setDefaultAlertController()
-            }
-        }
-    }
-}
-
-// MARK: - 音视频授权私有方法
-extension AuthorizationManager {
-    fileprivate class func defaultAuthorized(mediaType: FDMediaType, completion: @escaping AuthorizationCompletion) {
-        authorizationStatus(forMediaType: mediaType) { (status) in
-            switch status {
-            case .notDetermined:
-                AVCaptureDevice.requestAccess(forMediaType: mediaType.rawValue, completionHandler: { (granted) in
-                    if granted {
-                        DispatchQueue.main.async {
-                            completion(AuthorizationResult.success)
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            let error = AuthorizationError.message("授权失败  \(mediaType.rawValue)")
+                    DispatchQueue.main.async {
+                        if granted {
+                            DispatchQueue.main.async {
+                                completion(AuthorizationResult.success("notDetermined"))
+                            }
+                        } else {
+                            let message = error.debugDescription
+                            let error = AuthorizationError.contacts(message)
                             completion(AuthorizationResult.failure(error))
                         }
                     }
                 })
             case .authorized:
                 DispatchQueue.main.async {
-                    completion(AuthorizationResult.success)
+                    completion(AuthorizationResult.success("authorized"))
+                }
+            case .restricted, .denied:
+                DispatchQueue.main.async {
+                    setDefaultAlertController()
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: - 音视频授权私有方法
+fileprivate extension AuthorizationManager {
+    class func defaultAuthorized(mediaType: FDMediaType, completion: @escaping AuthorizationCompletion) {
+        authorizationStatus(forMediaType: mediaType) { (status) in
+            switch status {
+            case .notDetermined:
+                AVCaptureDevice.requestAccess(forMediaType: mediaType.rawValue, completionHandler: { (granted) in
+                    DispatchQueue.main.async {
+                        if granted {
+                            completion(AuthorizationResult.success("notDetermined"))
+                        } else {
+                            var error = AuthorizationError.video("..")
+                            if mediaType == FDMediaType.audio {
+                                error = AuthorizationError.audio("..")
+                            }
+                            completion(AuthorizationResult.failure(error))
+                        }
+                    }
+                })
+            case .authorized:
+                DispatchQueue.main.async {
+                    completion(AuthorizationResult.success("authorized"))
                 }
             case .denied, .restricted:
-                setDefaultAlertController()
+                DispatchQueue.main.async {
+                    setDefaultAlertController()
+                }
             }
         }
     }
     
+    
+    
+    fileprivate class func authorizationStatus(forMediaType mediaType: FDMediaType, finish: (AVAuthorizationStatus) -> ()) {
+        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: mediaType.rawValue)
+        switch authStatus {
+        case .authorized:
+            finish(.authorized)
+        case .denied:
+            finish(.denied)
+        case .notDetermined:
+            finish(.notDetermined)
+        case .restricted:
+            finish(.restricted)
+        }
+    }
+}
+
+
+// MARK: - 弹框
+extension AuthorizationManager {
     fileprivate class func setDefaultAlertController() {
         let alertController = UIAlertController(title: configuration.title, message: configuration.message, preferredStyle: UIAlertControllerStyle.alert)
         let action0 = UIAlertAction(title: "设置", style: UIAlertActionStyle.default, handler: { (action) in
             guard let url = URL(string: UIApplicationOpenSettingsURLString) else {
-                print("UIApplicationOpenSettingsURLString 有可能被废弃了")
+                assertionFailure("UIApplicationOpenSettingsURLString 有可能被废弃了")
                 return
             }
             if #available(iOS 10.0, *) {
@@ -269,64 +268,24 @@ extension AuthorizationManager {
             configuration.presentingViewController = nil
         })
     }
-    
-    
-    fileprivate class func authorizationStatus(forMediaType mediaType: FDMediaType, finish: (AVAuthorizationStatus) -> ()) {
-        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: mediaType.rawValue)
-        switch authStatus {
-        case .authorized:
-            finish(.authorized)
-        case .denied:
-            finish(.denied)
-        case .notDetermined:
-            finish(.notDetermined)
-        case .restricted:
-            finish(.restricted)
-        }
-    }
 }
 
 
 // MARK: - 授权结果处理
-public enum AuthorizationError: AuthorizationErrorProtocol {
-    case message(String)
-    
-    public func analysis<Error>(ifMessage: (String) -> Error) -> Error {
-        switch self {
-        case let .message(str):
-            return ifMessage(str)
-        }
-    }
-    
-    // MARK: CustomStringConvertible
-    public var description: String {
-        return analysis(ifMessage: { ".message(\($0))" })
-    }
-    
-    // MARK: CustomDebugStringConvertible
-    public var debugDescription: String {
-        return description
-    }
-
-}
-
 typealias AuthorizationCompletion = (_ result: AuthorizationResult<AuthorizationError>) -> Void
 
-protocol AuthorizationErrorProtocol: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible {
-}
-
 enum AuthorizationResult<Error: AuthorizationErrorProtocol>: CustomStringConvertible, CustomDebugStringConvertible {
-    case success
+    case success(String)
     case failure(Error)
     
     init(error: Error) {
         self = .failure(error)
     }
     
-    func analysis<Result>(ifSuccess: () -> Result, ifFailure: (Error) -> Result) -> Result {
+    func analysis<Result>(ifSuccess: (String) -> Result, ifFailure: (Error) -> Result) -> Result {
         switch self {
-        case .success:
-            return ifSuccess()
+        case let .success(str):
+            return ifSuccess(str)
         case let .failure(value):
             return ifFailure(value)
         }
@@ -335,8 +294,45 @@ enum AuthorizationResult<Error: AuthorizationErrorProtocol>: CustomStringConvert
     // MARK: CustomStringConvertible
     public var description: String {
         return analysis(
-            ifSuccess: { ".success" },
-            ifFailure: { ".failure(\($0.description))" })
+            ifSuccess: { "Success \($0) " },
+            ifFailure: { "Failure (\($0.description))" })
+    }
+    
+    // MARK: CustomDebugStringConvertible
+    public var debugDescription: String {
+        return description
+    }
+}
+
+
+
+protocol AuthorizationErrorProtocol: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible {
+    
+}
+
+enum AuthorizationError: AuthorizationErrorProtocol {
+    case video(String)
+    case audio(String)
+    case contacts(String)
+    
+    func analysis<Error>(ifVideo: (String) -> Error, ifAudio: (String) -> Error, ifContacts: (String) -> Error) -> Error {
+        switch self {
+        case let .video(str):
+            return ifVideo(str)
+        case let .audio(str):
+            return ifAudio(str)
+        case let .contacts(str):
+            return ifContacts(str)
+        }
+        
+    }
+    
+    // MARK: CustomStringConvertible
+    public var description: String {
+        return analysis(ifVideo: { "Video Denied \($0)"},
+                        ifAudio: {"Audio Denied \($0)"},
+                        ifContacts: {"Contacts Denied \($0)"}
+        )
     }
     
     // MARK: CustomDebugStringConvertible

@@ -13,13 +13,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        AuthorizationManager.configure { (config) in
-            config.title = "弹框标题" //
-            config.message = "弹框内容" //
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AuthorizationManager.config { (config) in
+            config.title = "aa"
+            config.message = "aa"
             config.presentingViewController = self
-            }.authorizedContacts {
-                
+        }.authorizedContacts { (result) in
+            print(result)
         }
     }
 

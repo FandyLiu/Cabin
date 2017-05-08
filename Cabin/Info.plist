@@ -35,6 +35,12 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSContactsUsageDescription</key>
-	<string>ha&apos;ha&apos;h</string>
+	<string>通讯录</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>图册</string>
+	<key>NSCameraUsageDescription</key>
+	<string>相机</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>话筒</string>
 </dict>
 </plist>
