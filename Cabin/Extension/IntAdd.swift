@@ -15,3 +15,9 @@ extension Int {
         return CGFloat(self)
     }
 }
+// MARK: - UInt -> Float
+extension UInt {
+    var f: CGFloat {
+        return CGFloat(self)
+    }
+}
