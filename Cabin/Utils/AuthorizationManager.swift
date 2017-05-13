@@ -10,8 +10,6 @@ import UIKit
 import AVFoundation
 import Contacts
 import AddressBook
-
-import AssetsLibrary
 import Photos
 
 /*
@@ -106,27 +104,39 @@ class AuthorizationManager {
     class func authorizedContacts(completion: @escaping AuthorizationCompletion) {
         authorizedAddressBook(completion: completion)
     }
+    
+    class func authorizedPhotoLibrary(completion: @escaping AuthorizationCompletion) {
+        authorizedPhoto(completion: completion)
+    }
 }
 
 
 // MARK: - 相册授权私有方法
 extension AuthorizationManager {
-    fileprivate class func authorizedABV(finish: @escaping () -> ()) {
+    fileprivate class func authorizedPhoto(completion: @escaping AuthorizationCompletion) {
         
         let status = PHPhotoLibrary.authorizationStatus()
-        //        switch status {
-        //        case .notDetermined:
-        //            PHPhotoLibrary.requestAuthorization({ (status) in
-        //                if status == PHAuthorizationStatus.authorized {
-        //                    DispatchQueue.main.async {
-        //                        finish()
-        //                    }
-        //                }
-        //            })
-        //
-        //        }
-        
-        
+        switch status {
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                DispatchQueue.main.async {
+                    if status == PHAuthorizationStatus.authorized {
+                        completion(AuthorizationResult.success("notDetermined"))
+                    } else {
+                        let error = AuthorizationError.photo("...")
+                        completion(AuthorizationResult.failure(error))
+                    }
+                }
+            })
+        case .authorized:
+            DispatchQueue.main.async {
+                completion(AuthorizationResult.success("authorized"))
+            }
+        case .denied, .restricted:
+            DispatchQueue.main.async {
+                setDefaultAlertController()
+            }
+        }
     }
 }
 
@@ -243,7 +253,8 @@ fileprivate extension AuthorizationManager {
 
 // MARK: - 弹框
 extension AuthorizationManager {
-    fileprivate class func setDefaultAlertController() {
+    /// 可以覆盖这个方法来实现拒绝情况, 如果拒绝没有要执行的,则覆盖写个空的
+    class func setDefaultAlertController() {
         let alertController = UIAlertController(title: configuration.title, message: configuration.message, preferredStyle: UIAlertControllerStyle.alert)
         let action0 = UIAlertAction(title: "设置", style: UIAlertActionStyle.default, handler: { (action) in
             guard let url = URL(string: UIApplicationOpenSettingsURLString) else {
@@ -314,8 +325,9 @@ enum AuthorizationError: AuthorizationErrorProtocol {
     case video(String)
     case audio(String)
     case contacts(String)
+    case photo(String)
     
-    func analysis<Error>(ifVideo: (String) -> Error, ifAudio: (String) -> Error, ifContacts: (String) -> Error) -> Error {
+    func analysis<Error>(ifVideo: (String) -> Error, ifAudio: (String) -> Error, ifContacts: (String) -> Error, ifPhoto: (String) -> Error) -> Error {
         switch self {
         case let .video(str):
             return ifVideo(str)
@@ -323,6 +335,8 @@ enum AuthorizationError: AuthorizationErrorProtocol {
             return ifAudio(str)
         case let .contacts(str):
             return ifContacts(str)
+        case let .photo(str):
+            return ifPhoto(str)
         }
         
     }
@@ -331,7 +345,8 @@ enum AuthorizationError: AuthorizationErrorProtocol {
     public var description: String {
         return analysis(ifVideo: { "Video Denied \($0)"},
                         ifAudio: {"Audio Denied \($0)"},
-                        ifContacts: {"Contacts Denied \($0)"}
+                        ifContacts: {"Contacts Denied \($0)"},
+                        ifPhoto:{"Photo Denied \($0)"}
         )
     }
     

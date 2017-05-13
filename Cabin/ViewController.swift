@@ -21,7 +21,7 @@ class ViewController: UIViewController {
             config.title = "aa"
             config.message = "aa"
             config.presentingViewController = self
-        }.authorizedContacts { (result) in
+        }.authorizedPhotoLibrary { (result) in
             print(result)
         }
     }
