@@ -1,26 +1,41 @@
 //
-//  SpellingChecker.swift
+//  StringAdd.swift
 //  Cabin
 //
-//  Created by QianTuFD on 2017/4/6.
+//  Created by QianTuFD on 2017/5/25.
 //  Copyright © 2017年 fandy. All rights reserved.
 //
 
 import UIKit
 
+
+// MARK: - 汉子转拼音
 extension String {
-    
+    /// 汉子转拼音 去空格
+    var pinYin: String {
+        let str = NSMutableString(string: self) as CFMutableString
+        CFStringTransform(str, nil, kCFStringTransformMandarinLatin, false)
+        CFStringTransform(str, nil, kCFStringTransformStripDiacritics, false)
+        return (str as String).replacingOccurrences(of: " ", with: "")
+    }
+}
+
+
+// MARK: - 字符串拼写
+extension String {
     /// 文字是否拼写正确
     var isSpelledCorrect: Bool {
         let checker = UITextChecker()
         let range = NSMakeRange(0, self.characters.count)
-//        let language = NSLocale.current.languageCode ?? "en"
+        //        let language = NSLocale.current.languageCode ?? "en"
         let language = "en"
         let wrongWordRange = checker.rangeOfMisspelledWord(in: self, range: range, startingAt: 0, wrap: false, language: language)
         return wrongWordRange.location == NSNotFound
     }
-    
-    
+}
+
+// MARK: - 字符串包含
+extension String {
     /// 是否包含表情
     var isContainsEmoji: Bool {
         for scalar in unicodeScalars {
@@ -48,9 +63,12 @@ extension String {
         }
         return false
     }
-    
-    
-    /// 字符串最可能的语言
+}
+
+
+// MARK: - 语言检测
+extension String {
+    /// 字符串最可能的语言 同 bestLanguage
     var bestStringLanguage: String? {
         if self.characters.count < 100 {
             return CFStringTokenizerCopyBestStringLanguage(self as CFString, CFRange(location: 0, length: self.characters.count)) as String?
@@ -59,7 +77,7 @@ extension String {
         }
     }
     
-    /// 字符串最可能的语言
+    /// 字符串最可能的语言 同 bestStringLanguage
     var bestLanguage: String? {
         let tagSchemes = [NSLinguisticTagSchemeLanguage]
         let tagger = NSLinguisticTagger(tagSchemes: tagSchemes, options: 0)
@@ -67,6 +85,4 @@ extension String {
         let lang = tagger.tag(at: 0, scheme: NSLinguisticTagSchemeLanguage, tokenRange: nil, sentenceRange: nil)
         return lang
     }
-    
-    
 }

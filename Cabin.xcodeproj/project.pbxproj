@@ -23,11 +23,11 @@
 		DB637EF61E9C730000F8F26A /* CabinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637EF51E9C730000F8F26A /* CabinTests.swift */; };
 		DB637F011E9C730000F8F26A /* CabinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F001E9C730000F8F26A /* CabinUITests.swift */; };
 		DB637F111E9C735100F8F26A /* AuthorizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */; };
-		DB637F121E9C735100F8F26A /* SpellingChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F101E9C735100F8F26A /* SpellingChecker.swift */; };
 		DB637F141E9C736D00F8F26A /* SpellingCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB637F131E9C736D00F8F26A /* SpellingCheckerTests.swift */; };
 		DB760A1D1EA44E6F00E8C3FA /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A1C1EA44E6F00E8C3FA /* Const.swift */; };
 		DB760A201EA44F1800E8C3FA /* UIColorAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A1F1EA44F1800E8C3FA /* UIColorAdd.swift */; };
 		DB760A221EA4501600E8C3FA /* IntAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB760A211EA4501600E8C3FA /* IntAdd.swift */; };
+		DBF9652F1ED6A8E70088B157 /* StringAdd.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF9652E1ED6A8E70088B157 /* StringAdd.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,11 +70,11 @@
 		DB637F001E9C730000F8F26A /* CabinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CabinUITests.swift; sourceTree = "<group>"; };
 		DB637F021E9C730000F8F26A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationManager.swift; sourceTree = "<group>"; };
-		DB637F101E9C735100F8F26A /* SpellingChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingChecker.swift; sourceTree = "<group>"; };
 		DB637F131E9C736D00F8F26A /* SpellingCheckerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingCheckerTests.swift; sourceTree = "<group>"; };
 		DB760A1C1EA44E6F00E8C3FA /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		DB760A1F1EA44F1800E8C3FA /* UIColorAdd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorAdd.swift; sourceTree = "<group>"; };
 		DB760A211EA4501600E8C3FA /* IntAdd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntAdd.swift; sourceTree = "<group>"; };
+		DBF9652E1ED6A8E70088B157 /* StringAdd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringAdd.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				DB637F0F1E9C735100F8F26A /* AuthorizationManager.swift */,
-				DB637F101E9C735100F8F26A /* SpellingChecker.swift */,
 				DB760A1C1EA44E6F00E8C3FA /* Const.swift */,
 			);
 			path = Utils;
@@ -179,6 +178,7 @@
 				DB591ECE1EC1587B00EA7622 /* UILabelAdd.swift */,
 				DB591ED01EC158C100EA7622 /* UITableViewCellAdd.swift */,
 				DB591ED21EC158EE00EA7622 /* UIViewAdd.swift */,
+				DBF9652E1ED6A8E70088B157 /* StringAdd.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -322,12 +322,12 @@
 				DB591ECD1EC1582800EA7622 /* NSStringAdd.swift in Sources */,
 				DB591ED31EC158EE00EA7622 /* UIViewAdd.swift in Sources */,
 				DB637EE01E9C730000F8F26A /* ViewController.swift in Sources */,
-				DB637F121E9C735100F8F26A /* SpellingChecker.swift in Sources */,
 				DB591ECF1EC1587B00EA7622 /* UILabelAdd.swift in Sources */,
 				DB637F111E9C735100F8F26A /* AuthorizationManager.swift in Sources */,
 				DB760A221EA4501600E8C3FA /* IntAdd.swift in Sources */,
 				DB760A201EA44F1800E8C3FA /* UIColorAdd.swift in Sources */,
 				DB591EC71EC1572700EA7622 /* UIImageAdd.swift in Sources */,
+				DBF9652F1ED6A8E70088B157 /* StringAdd.swift in Sources */,
 				DB637EDE1E9C730000F8F26A /* AppDelegate.swift in Sources */,
 				DB591EC91EC1577900EA7622 /* ArrayAdd.swift in Sources */,
 				DB637EE61E9C730000F8F26A /* Cabin.xcdatamodeld in Sources */,
