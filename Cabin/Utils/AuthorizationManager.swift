@@ -11,7 +11,7 @@ import AVFoundation
 import Contacts
 import AddressBook
 import Photos
-
+import CoreLocation
 /*
  @available(iOS 4.0, *)
  public let AVMediaTypeVideo: String
@@ -105,8 +105,36 @@ class AuthorizationManager {
         authorizedAddressBook(completion: completion)
     }
     
+    /// 获取相册权限, 授权成功回调
+    ///
+    /// - Parameter finish: 成功回调
     class func authorizedPhotoLibrary(completion: @escaping AuthorizationCompletion) {
         authorizedPhoto(completion: completion)
+    }
+    
+    class func authorizedLocation(completion: @escaping AuthorizationCompletion) {
+        authorizedPrlocation(completion: completion)
+    }
+}
+
+
+// MARK: - 定位授权
+extension AuthorizationManager {
+    fileprivate class func authorizedPrlocation(completion: @escaping AuthorizationCompletion) {
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .notDetermined:
+            print("")
+        case .authorizedAlways:
+            print("")
+        case .authorizedWhenInUse:
+            print("")
+        case .denied:
+            print("")
+        case .restricted:
+            print("")
+        }
+        
     }
 }
 
