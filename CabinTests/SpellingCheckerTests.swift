@@ -33,7 +33,4 @@ class SpellingCheckerTests: XCTestCase {
     func testStrC() {
         XCTAssert(strC.isSpelledCorrect)
     }
-    
-
-
 }
